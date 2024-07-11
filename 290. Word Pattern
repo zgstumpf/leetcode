@@ -1,0 +1,16 @@
+class Solution:
+    def wordPattern(self, pattern: str, s: str) -> bool:        
+        matches = {} # {char in pattern : word in s}
+        words = s.split(' ')
+        if len(words) != len(pattern):
+            return False
+
+        for idx, char in enumerate(pattern):
+            if char not in matches:
+                if words[idx] in matches.values():
+                    return False
+                matches[char] = words[idx]
+            else:
+                if matches[char] != words[idx]:
+                    return False
+        return True
