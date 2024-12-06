@@ -3,5 +3,5 @@
 *.sql text
 
 *.tsql linguist-detectable=true
-*.tsql linguist-language=T-SQL
+*.tsql linguist-language=tsql
 *.tsql text
