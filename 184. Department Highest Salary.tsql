@@ -1,0 +1,18 @@
+With DepartmentByMaxSalary as (
+    select
+        Department.id
+        , Department.name
+        , max(Employee.salary) as max_salary
+    from Employee
+    join Department
+        on Employee.departmentId = Department.id
+    group by Department.id, Department.name
+)
+select
+    DepartmentByMaxSalary.name as Department
+    , Employee.name as Employee
+    , Employee.salary as Salary
+from Employee
+join DepartmentByMaxSalary
+    on Employee.departmentId = DepartmentByMaxSalary.id
+where Employee.salary = DepartmentByMaxSalary.max_salary
