@@ -1,0 +1,25 @@
+with DepartmentBySalaryRanked as (
+    select distinct
+        departmentId
+        , salary
+        , dense_rank() over (partition by departmentId order by salary desc) as salaryRank
+    from Employee
+),
+Top3SalariesPerDepartment as (
+    select 
+        *
+    from DepartmentBySalaryRanked
+    where salaryRank <= 3
+)
+select
+    Department.name as Department
+    , Employee.name as Employee
+    , Employee.salary as Salary
+from Department
+join Employee
+    on Department.id = Employee.departmentId 
+where 
+    exists(
+        select salary from Top3SalariesPerDepartment 
+        where salary = Employee.salary and departmentId = Employee.departmentId
+    )
