@@ -1,0 +1,4 @@
+select
+    Customers.name as Customers
+from Customers
+where not(exists(select Orders.customerId from Orders where Orders.CustomerId = Customers.id))
