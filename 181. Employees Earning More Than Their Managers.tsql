@@ -1,0 +1,13 @@
+with EmployeeWithManagers as (
+    select
+        Employee.name
+        , Employee.salary as employee_salary
+        , manager.salary as manager_salary
+    from Employee
+    join Employee manager
+    on Employee.managerId = manager.id
+)
+select
+    name as Employee
+from EmployeeWithManagers
+where employee_salary > manager_salary
