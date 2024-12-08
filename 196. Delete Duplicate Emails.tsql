@@ -1,0 +1,11 @@
+with EmailsWithMinId as (
+    select
+        min(id) as id
+        , email
+    from Person
+    group by email
+)
+delete Person
+where 
+    not(exists(select id from EmailsWithMinId where email = Person.email and id = Person.id))
+    
