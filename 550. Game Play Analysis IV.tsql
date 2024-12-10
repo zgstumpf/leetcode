@@ -1,0 +1,39 @@
+with NextDays as (
+    select
+        player_id
+        , event_date
+        , lead(event_date, 1) over (partition by player_id order by event_date) as next_day
+        , min(event_date) over (partition by player_id) as earliest_event_date
+    from Activity
+),
+PlayersWithIfTheyAreReturningVisitor as (
+    select
+        player_id
+        ,  count(
+            case
+                when 
+                    event_date = earliest_event_date 
+                    and next_day is not null 
+                    and datediff(day, earliest_event_date, next_day) = 1 -- only count if next day after
+                        then 1.0
+                else null
+            end
+        ) as isReturningVisitor2ndDay
+    from NextDays
+    group by player_id
+)
+select 
+    round(
+        1.0 
+        *
+        count(
+            case
+                when isReturningVisitor2ndDay = 1 then 1
+                else null
+            end
+        )
+        / 
+        count(*)
+        , 2
+    ) as fraction
+from PlayersWithIfTheyAreReturningVisitor
