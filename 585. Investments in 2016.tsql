@@ -1,0 +1,16 @@
+select
+    round(
+        sum(tiv_2016)
+    , 2
+    ) as tiv_2016
+from Insurance main
+where
+    exists(select tiv_2015 from Insurance sub 
+        where main.pid != sub.pid 
+        and main.tiv_2015 = sub.tiv_2015
+    )
+    and not(exists(select lat, lon from Insurance sub2 
+                where main.pid != sub2.pid 
+                and main.lat = sub2.lat 
+                and main.lon = sub2.lon
+           ))
